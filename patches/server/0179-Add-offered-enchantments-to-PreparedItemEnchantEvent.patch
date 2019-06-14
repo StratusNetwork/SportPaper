@@ -1,0 +1,70 @@
+From 83da5aeabb3f6c81a2223fb70fbbea71e2ed7256 Mon Sep 17 00:00:00 2001
+From: Rafi Baum <rafi@ukbaums.com>
+Date: Fri, 14 Jun 2019 19:04:18 +0100
+Subject: [PATCH] Add offered enchantments to PreparedItemEnchantEvent
+
+
+diff --git a/src/main/java/net/minecraft/server/ContainerEnchantTable.java b/src/main/java/net/minecraft/server/ContainerEnchantTable.java
+index 5c473bef..abcbc2d0 100644
+--- a/src/main/java/net/minecraft/server/ContainerEnchantTable.java
++++ b/src/main/java/net/minecraft/server/ContainerEnchantTable.java
+@@ -6,6 +6,7 @@ import java.util.Random;
+ // CraftBukkit start
+ import java.util.Map;
+ 
++import network.stratus.sportpaper.api.enchantments.PreparedEnchantment;
+ import org.bukkit.craftbukkit.inventory.CraftInventoryEnchanting;
+ import org.bukkit.craftbukkit.inventory.CraftInventoryView;
+ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+@@ -155,9 +156,28 @@ public class ContainerEnchantTable extends Container {
+                         }
+                     }
+ 
++                    PreparedEnchantment[] preparedEnchantments = new PreparedEnchantment[3]; // SportPaper - add prepared enchantments
++                    for (j = 0; j < 3; ++j) {
++                        if (this.costs[j] > 0) {
++                            List list = this.a(itemstack, j, this.costs[j]);
++
++                            if (list != null && !list.isEmpty()) {
++                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.k.nextInt(list.size()));
++                                // SportPaper start
++                                preparedEnchantments[j] = new PreparedEnchantment(
++                                    org.bukkit.enchantments.Enchantment.getByName(weightedrandomenchant.enchantment.name),
++                                    weightedrandomenchant.level,
++                                    costs[j],
++                                    j + 1);
++                                // SportPaper end
++                                this.h[j] = weightedrandomenchant.enchantment.id | weightedrandomenchant.level << 8;
++                            }
++                        }
++                    }
++
+                     // CraftBukkit start
+                     CraftItemStack item = CraftItemStack.asCraftMirror(itemstack);
+-                    PrepareItemEnchantEvent event = new PrepareItemEnchantEvent(player, this.getBukkitView(), this.world.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()), item, this.costs, i);
++                    PrepareItemEnchantEvent event = new PrepareItemEnchantEvent(player, this.getBukkitView(), this.world.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()), item, this.costs, i, preparedEnchantments); // SportPaper - add prepared enchantments
+                     event.setCancelled(!itemstack.v());
+                     this.world.getServer().getPluginManager().callEvent(event);
+ 
+@@ -169,18 +189,6 @@ public class ContainerEnchantTable extends Container {
+                     }
+                     // CraftBukkit end
+ 
+-                    for (j = 0; j < 3; ++j) {
+-                        if (this.costs[j] > 0) {
+-                            List list = this.a(itemstack, j, this.costs[j]);
+-
+-                            if (list != null && !list.isEmpty()) {
+-                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.k.nextInt(list.size()));
+-
+-                                this.h[j] = weightedrandomenchant.enchantment.id | weightedrandomenchant.level << 8;
+-                            }
+-                        }
+-                    }
+-
+                     this.b();
+                 }
+             } else {
+-- 
+2.17.1
+

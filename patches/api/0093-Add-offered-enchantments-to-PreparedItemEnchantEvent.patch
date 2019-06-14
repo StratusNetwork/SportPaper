@@ -1,0 +1,118 @@
+From d9b7bd22fd331d610ec7f47d11a70630a2242b7e Mon Sep 17 00:00:00 2001
+From: Rafi Baum <rafi@ukbaums.com>
+Date: Fri, 14 Jun 2019 19:03:54 +0100
+Subject: [PATCH] Add offered enchantments to PreparedItemEnchantEvent
+
+
+diff --git a/src/main/java/network/stratus/sportpaper/api/enchantments/PreparedEnchantment.java b/src/main/java/network/stratus/sportpaper/api/enchantments/PreparedEnchantment.java
+new file mode 100644
+index 00000000..aabc66e8
+--- /dev/null
++++ b/src/main/java/network/stratus/sportpaper/api/enchantments/PreparedEnchantment.java
+@@ -0,0 +1,59 @@
++package network.stratus.sportpaper.api.enchantments;
++
++import org.bukkit.enchantments.Enchantment;
++
++/**
++ * Wrapper class for an enchantment which was offered in an enchanting table.
++ *
++ * @author Rafi Baum
++ */
++public class PreparedEnchantment {
++
++  private final Enchantment enchantment;
++  private final int level;
++  private final int xpCost;
++  private final int lapisCost;
++
++  /**
++   * Constructor.
++   *
++   * @param enchantment type offered
++   * @param level of enchantment
++   * @param xpCost in xp of enchantment
++   * @param lapisCost of enchantment
++   */
++  public PreparedEnchantment(Enchantment enchantment, int level, int xpCost, int lapisCost) {
++    this.enchantment = enchantment;
++    this.level = level;
++    this.xpCost = xpCost;
++    this.lapisCost = lapisCost;
++  }
++
++  /**
++   * @return enchantment being offered
++   */
++  public Enchantment getEnchantment() {
++    return enchantment;
++  }
++
++  /**
++   * @return level of enchantment
++   */
++  public int getLevel() {
++    return level;
++  }
++
++  /**
++   * @return exp cost of enchantment
++   */
++  public int getXpCost() {
++    return xpCost;
++  }
++
++  /**
++   * @return lapis cost of enchantment
++   */
++  public int getLapisCost() {
++    return lapisCost;
++  }
++}
+diff --git a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
+index 6c0aa9ff..41120f34 100644
+--- a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
++++ b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
+@@ -1,5 +1,6 @@
+ package org.bukkit.event.enchantment;
+ 
++import network.stratus.sportpaper.api.enchantments.PreparedEnchantment;
+ import org.bukkit.block.Block;
+ import org.bukkit.entity.Player;
+ import org.bukkit.event.Cancellable;
+@@ -20,8 +21,9 @@ public class PrepareItemEnchantEvent extends InventoryEvent implements Cancellab
+     private final int bonus;
+     private boolean cancelled;
+     private final Player enchanter;
++    private final PreparedEnchantment[] enchantments;
+ 
+-    public PrepareItemEnchantEvent(final Player enchanter, InventoryView view, final Block table, final ItemStack item, final int[] levelsOffered, final int bonus) {
++    public PrepareItemEnchantEvent(final Player enchanter, InventoryView view, final Block table, final ItemStack item, final int[] levelsOffered, final int bonus, final PreparedEnchantment[] enchantments) {
+         super(view);
+         this.enchanter = enchanter;
+         this.table = table;
+@@ -29,6 +31,7 @@ public class PrepareItemEnchantEvent extends InventoryEvent implements Cancellab
+         this.levelsOffered = levelsOffered;
+         this.bonus = bonus;
+         this.cancelled = false;
++        this.enchantments = enchantments;
+     }
+ 
+     /**
+@@ -77,6 +80,13 @@ public class PrepareItemEnchantEvent extends InventoryEvent implements Cancellab
+         return bonus;
+     }
+ 
++    /**
++     * @return enchantments being offered
++     */
++    public PreparedEnchantment[] getEnchantments() {
++        return enchantments;
++    }
++
+     public boolean isCancelled() {
+         return cancelled;
+     }
+-- 
+2.17.1
+

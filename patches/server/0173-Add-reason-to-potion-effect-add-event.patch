@@ -1,6 +1,6 @@
-From 5776f3568bfb77ad295c660d535e700b802c1e84 Mon Sep 17 00:00:00 2001
+From 38fdf830a5d2c779da5b0755e3dfb97c6545966c Mon Sep 17 00:00:00 2001
 From: Rafi Baum <rafi@ukbaums.com>
-Date: Wed, 12 Jun 2019 19:33:31 +0100
+Date: Fri, 14 Jun 2019 17:28:05 +0100
 Subject: [PATCH] Add reason to potion effect add event
 
 
@@ -186,7 +186,7 @@ index 6d3b002b..a284d366 100644
      }
  
 diff --git a/src/main/java/net/minecraft/server/ItemFood.java b/src/main/java/net/minecraft/server/ItemFood.java
-index 4a2ec5dc..22542f26 100644
+index 4a2ec5dc..62288d42 100644
 --- a/src/main/java/net/minecraft/server/ItemFood.java
 +++ b/src/main/java/net/minecraft/server/ItemFood.java
 @@ -1,5 +1,7 @@
@@ -197,23 +197,29 @@ index 4a2ec5dc..22542f26 100644
  public class ItemFood extends Item {
  
      public final int a;
-@@ -35,7 +37,13 @@ public class ItemFood extends Item {
+@@ -35,7 +37,19 @@ public class ItemFood extends Item {
  
      protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
          if (!world.isClientSide && this.l > 0 && world.random.nextFloat() < this.o) {
 -            entityhuman.addEffect(new MobEffect(this.l, this.m * 20, this.n));
-+            // SportPaper start - add effect reason for golden apples
-+            if (this instanceof ItemGoldenApple) {
-+                entityhuman.addEffect(new MobEffect(this.l, this.m * 20, this.n), EffectAddReason.GOLDEN_APPLE);
-+            } else {
-+                entityhuman.addEffect(new MobEffect(this.l, this.m * 20, this.n));
++            // SportPaper start - add effect reasons
++            EffectAddReason reason = EffectAddReason.UNKNOWN;
++            switch (getName()) {
++                case "appleGold":
++                case "porkchopRaw":
++                case "rottenFlesh":
++                case "spiderEye":
++                case "potatoPoisonous":
++                reason = EffectAddReason.FOOD;
 +            }
++
 +            // SportPaper - end
++            entityhuman.addEffect(new MobEffect(this.l, this.m * 20, this.n), reason);
          }
  
      }
 diff --git a/src/main/java/net/minecraft/server/ItemGoldenApple.java b/src/main/java/net/minecraft/server/ItemGoldenApple.java
-index 1537d213..5f7202db 100644
+index 1537d213..b8224898 100644
 --- a/src/main/java/net/minecraft/server/ItemGoldenApple.java
 +++ b/src/main/java/net/minecraft/server/ItemGoldenApple.java
 @@ -1,5 +1,7 @@
@@ -229,7 +235,7 @@ index 1537d213..5f7202db 100644
      protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
          if (!world.isClientSide) {
 -            entityhuman.addEffect(new MobEffect(MobEffectList.ABSORBTION.id, 2400, 0));
-+            entityhuman.addEffect(new MobEffect(MobEffectList.ABSORBTION.id, 2400, 0), EffectAddReason.GOLDEN_APPLE); // SportPaper - effect reason
++            entityhuman.addEffect(new MobEffect(MobEffectList.ABSORBTION.id, 2400, 0), EffectAddReason.FOOD); // SportPaper - effect reason
          }
  
          if (itemstack.getData() > 0) {
@@ -238,9 +244,9 @@ index 1537d213..5f7202db 100644
 -                entityhuman.addEffect(new MobEffect(MobEffectList.RESISTANCE.id, 6000, 0));
 -                entityhuman.addEffect(new MobEffect(MobEffectList.FIRE_RESISTANCE.id, 6000, 0));
 +                // SportPaper start - effect reason
-+                entityhuman.addEffect(new MobEffect(MobEffectList.REGENERATION.id, 600, 4), EffectAddReason.GOLDEN_APPLE);
-+                entityhuman.addEffect(new MobEffect(MobEffectList.RESISTANCE.id, 6000, 0), EffectAddReason.GOLDEN_APPLE);
-+                entityhuman.addEffect(new MobEffect(MobEffectList.FIRE_RESISTANCE.id, 6000, 0), EffectAddReason.GOLDEN_APPLE);
++                entityhuman.addEffect(new MobEffect(MobEffectList.REGENERATION.id, 600, 4), EffectAddReason.FOOD);
++                entityhuman.addEffect(new MobEffect(MobEffectList.RESISTANCE.id, 6000, 0), EffectAddReason.FOOD);
++                entityhuman.addEffect(new MobEffect(MobEffectList.FIRE_RESISTANCE.id, 6000, 0), EffectAddReason.FOOD);
 +                // SportPaper end
              }
          } else {

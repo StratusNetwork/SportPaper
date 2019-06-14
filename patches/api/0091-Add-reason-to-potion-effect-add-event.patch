@@ -1,6 +1,6 @@
-From d136b226f5f72a966def10605b05413a5d048e48 Mon Sep 17 00:00:00 2001
-From: Austin Mayes <austin@avicus.net>
-Date: Sun, 14 Apr 2019 16:11:20 -0500
+From da45bcabfc7bbb009d25707fc1f7e66bc474f0fc Mon Sep 17 00:00:00 2001
+From: Rafi Baum <rafi@ukbaums.com>
+Date: Fri, 14 Jun 2019 17:27:11 +0100
 Subject: [PATCH] Add reason to potion effect add event
 
 
@@ -80,7 +80,7 @@ index 7b2d0de4..ae78803f 100644
       * Returns whether the living entity already has an existing effect of
       * the given {@link PotionEffectType} applied to it.
 diff --git a/src/main/java/org/bukkit/event/entity/PotionEffectAddEvent.java b/src/main/java/org/bukkit/event/entity/PotionEffectAddEvent.java
-index a0e06344..2c9d77a3 100644
+index a0e06344..1df6ac54 100644
 --- a/src/main/java/org/bukkit/event/entity/PotionEffectAddEvent.java
 +++ b/src/main/java/org/bukkit/event/entity/PotionEffectAddEvent.java
 @@ -11,9 +11,11 @@ import org.bukkit.potion.PotionEffect;
@@ -115,9 +115,9 @@ index a0e06344..2c9d77a3 100644
 +         */
 +        COMMAND,
 +        /**
-+         * Added by eating a golden apple
++         * Added by consuming food
 +         */
-+        GOLDEN_APPLE,
++        FOOD,
 +        /**
 +         * Added by being near a beacon
 +         */
@@ -231,5 +231,5 @@ index 60a35516..cb592899 100644
  
      @Override
 -- 
-2.20.1
+2.17.1
 

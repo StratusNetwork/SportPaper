@@ -1,11 +1,11 @@
-From 83da5aeabb3f6c81a2223fb70fbbea71e2ed7256 Mon Sep 17 00:00:00 2001
+From dbd6fab7a086759e316a2632637d328c4600fdfd Mon Sep 17 00:00:00 2001
 From: Rafi Baum <rafi@ukbaums.com>
-Date: Fri, 14 Jun 2019 19:04:18 +0100
+Date: Fri, 14 Jun 2019 23:09:52 +0100
 Subject: [PATCH] Add offered enchantments to PreparedItemEnchantEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/ContainerEnchantTable.java b/src/main/java/net/minecraft/server/ContainerEnchantTable.java
-index 5c473bef..abcbc2d0 100644
+index 5c473bef..2ba47b60 100644
 --- a/src/main/java/net/minecraft/server/ContainerEnchantTable.java
 +++ b/src/main/java/net/minecraft/server/ContainerEnchantTable.java
 @@ -6,6 +6,7 @@ import java.util.Random;
@@ -29,7 +29,7 @@ index 5c473bef..abcbc2d0 100644
 +                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.k.nextInt(list.size()));
 +                                // SportPaper start
 +                                preparedEnchantments[j] = new PreparedEnchantment(
-+                                    org.bukkit.enchantments.Enchantment.getByName(weightedrandomenchant.enchantment.name),
++                                    org.bukkit.enchantments.Enchantment.getById(weightedrandomenchant.enchantment.id),
 +                                    weightedrandomenchant.level,
 +                                    costs[j],
 +                                    j + 1);

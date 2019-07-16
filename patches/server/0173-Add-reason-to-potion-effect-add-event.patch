@@ -1,11 +1,11 @@
-From 38fdf830a5d2c779da5b0755e3dfb97c6545966c Mon Sep 17 00:00:00 2001
+From 7d0e1aef6278deca73e6a153fa94d950ef855776 Mon Sep 17 00:00:00 2001
 From: Rafi Baum <rafi@ukbaums.com>
-Date: Fri, 14 Jun 2019 17:28:05 +0100
+Date: Tue, 16 Jul 2019 18:26:59 -0400
 Subject: [PATCH] Add reason to potion effect add event
 
 
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index d4b8a0ef..1bcb177f 100644
+index d4b8a0ef1..1bcb177f3 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
@@ -46,7 +46,7 @@ index d4b8a0ef..1bcb177f 100644
                  if(event.isCancelled()) return;
                  // SportBukkit end
 diff --git a/src/main/java/net/minecraft/server/EntityPotion.java b/src/main/java/net/minecraft/server/EntityPotion.java
-index fd174c34..f4837eac 100644
+index fd174c346..f4837eaca 100644
 --- a/src/main/java/net/minecraft/server/EntityPotion.java
 +++ b/src/main/java/net/minecraft/server/EntityPotion.java
 @@ -8,6 +8,7 @@ import java.util.HashMap;
@@ -67,7 +67,7 @@ index fd174c34..f4837eac 100644
                                  }
                              }
 diff --git a/src/main/java/net/minecraft/server/EntitySkeleton.java b/src/main/java/net/minecraft/server/EntitySkeleton.java
-index 46bff95d..b284903c 100644
+index 46bff95d8..b284903c1 100644
 --- a/src/main/java/net/minecraft/server/EntitySkeleton.java
 +++ b/src/main/java/net/minecraft/server/EntitySkeleton.java
 @@ -3,6 +3,7 @@ package net.minecraft.server;
@@ -88,7 +88,7 @@ index 46bff95d..b284903c 100644
  
              return true;
 diff --git a/src/main/java/net/minecraft/server/EntitySpider.java b/src/main/java/net/minecraft/server/EntitySpider.java
-index 68a253c9..e3ca4ae8 100644
+index 68a253c96..e3ca4ae80 100644
 --- a/src/main/java/net/minecraft/server/EntitySpider.java
 +++ b/src/main/java/net/minecraft/server/EntitySpider.java
 @@ -1,6 +1,7 @@
@@ -109,7 +109,7 @@ index 68a253c9..e3ca4ae8 100644
          }
  
 diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
-index 0d31f10b..cbaf4e2f 100644
+index 0d31f10be..cbaf4e2f9 100644
 --- a/src/main/java/net/minecraft/server/EntityVillager.java
 +++ b/src/main/java/net/minecraft/server/EntityVillager.java
 @@ -3,6 +3,7 @@ package net.minecraft.server;
@@ -130,7 +130,7 @@ index 0d31f10b..cbaf4e2f 100644
          }
  
 diff --git a/src/main/java/net/minecraft/server/EntityWitherSkull.java b/src/main/java/net/minecraft/server/EntityWitherSkull.java
-index f0e627ba..c3785a18 100644
+index f0e627bac..c3785a18c 100644
 --- a/src/main/java/net/minecraft/server/EntityWitherSkull.java
 +++ b/src/main/java/net/minecraft/server/EntityWitherSkull.java
 @@ -1,6 +1,7 @@
@@ -151,7 +151,7 @@ index f0e627ba..c3785a18 100644
                  }
              }
 diff --git a/src/main/java/net/minecraft/server/EntityZombie.java b/src/main/java/net/minecraft/server/EntityZombie.java
-index 6d3b002b..a284d366 100644
+index 6d3b002bc..a284d3666 100644
 --- a/src/main/java/net/minecraft/server/EntityZombie.java
 +++ b/src/main/java/net/minecraft/server/EntityZombie.java
 @@ -5,11 +5,11 @@ import java.util.List;
@@ -186,7 +186,7 @@ index 6d3b002b..a284d366 100644
      }
  
 diff --git a/src/main/java/net/minecraft/server/ItemFood.java b/src/main/java/net/minecraft/server/ItemFood.java
-index 4a2ec5dc..62288d42 100644
+index 4a2ec5dce..a8b64c0c0 100644
 --- a/src/main/java/net/minecraft/server/ItemFood.java
 +++ b/src/main/java/net/minecraft/server/ItemFood.java
 @@ -1,5 +1,7 @@
@@ -205,11 +205,11 @@ index 4a2ec5dc..62288d42 100644
 +            // SportPaper start - add effect reasons
 +            EffectAddReason reason = EffectAddReason.UNKNOWN;
 +            switch (getName()) {
-+                case "appleGold":
-+                case "porkchopRaw":
-+                case "rottenFlesh":
-+                case "spiderEye":
-+                case "potatoPoisonous":
++                case "item.appleGold":
++                case "item.porkchopRaw":
++                case "item.rottenFlesh":
++                case "item.spiderEye":
++                case "item.potatoPoisonous":
 +                reason = EffectAddReason.FOOD;
 +            }
 +
@@ -219,7 +219,7 @@ index 4a2ec5dc..62288d42 100644
  
      }
 diff --git a/src/main/java/net/minecraft/server/ItemGoldenApple.java b/src/main/java/net/minecraft/server/ItemGoldenApple.java
-index 1537d213..b8224898 100644
+index 1537d2135..b82248983 100644
 --- a/src/main/java/net/minecraft/server/ItemGoldenApple.java
 +++ b/src/main/java/net/minecraft/server/ItemGoldenApple.java
 @@ -1,5 +1,7 @@
@@ -252,7 +252,7 @@ index 1537d213..b8224898 100644
          } else {
              super.c(itemstack, world, entityhuman);
 diff --git a/src/main/java/net/minecraft/server/ItemPotion.java b/src/main/java/net/minecraft/server/ItemPotion.java
-index 45dd15bd..134c1376 100644
+index 45dd15bd9..134c13760 100644
 --- a/src/main/java/net/minecraft/server/ItemPotion.java
 +++ b/src/main/java/net/minecraft/server/ItemPotion.java
 @@ -6,6 +6,7 @@ import java.util.ArrayList;
@@ -273,7 +273,7 @@ index 45dd15bd..134c1376 100644
              }
          }
 diff --git a/src/main/java/net/minecraft/server/TileEntityBeacon.java b/src/main/java/net/minecraft/server/TileEntityBeacon.java
-index f4717af7..164c52e3 100644
+index f4717af7d..164c52e30 100644
 --- a/src/main/java/net/minecraft/server/TileEntityBeacon.java
 +++ b/src/main/java/net/minecraft/server/TileEntityBeacon.java
 @@ -13,6 +13,7 @@ import org.bukkit.entity.HumanEntity;
@@ -303,7 +303,7 @@ index f4717af7..164c52e3 100644
                  }
              }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 4351e304..f74d6654 100644
+index 4351e3040..f74d66541 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -56,6 +56,7 @@ import org.bukkit.entity.Snowball;

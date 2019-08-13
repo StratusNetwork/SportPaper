@@ -354,6 +354,16 @@ spigot:
 
 paper:
 
+  # Custom knockback options. Defaults are commented after each option
+  knockback:
+    
+    friction: 2.0D   # 2.0D
+    horizontal: 0.35D   # 0.35D
+    vertical: 0.35D   # 0.35D
+    vertical-limit: 0.4D   # 0.4D
+    extra-horizontal: 0.425D   # 0.425D
+    extra-vertical: 0.085D   # 0.085D
+
   settings:
 
     # Whether interaction packets should be limited from clients.

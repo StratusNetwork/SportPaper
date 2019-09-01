@@ -1,0 +1,72 @@
+From 2dc970dfbe918ec4eafb8e8e12e84678f9bd17b2 Mon Sep 17 00:00:00 2001
+From: Rafi Baum <rafi@ukbaums.com>
+Date: Sat, 31 Aug 2019 23:13:10 -0400
+Subject: [PATCH] Add ender eye launch event
+
+
+diff --git a/src/main/java/network/stratus/sportpaper/api/events/EnderEyeLaunchEvent.java b/src/main/java/network/stratus/sportpaper/api/events/EnderEyeLaunchEvent.java
+new file mode 100644
+index 00000000..9255e0fb
+--- /dev/null
++++ b/src/main/java/network/stratus/sportpaper/api/events/EnderEyeLaunchEvent.java
+@@ -0,0 +1,57 @@
++package network.stratus.sportpaper.api.events;
++
++import org.bukkit.entity.EnderSignal;
++import org.bukkit.entity.HumanEntity;
++import org.bukkit.event.Cancellable;
++import org.bukkit.event.EntityAction;
++import org.bukkit.event.HandlerList;
++import org.bukkit.event.entity.EntityEvent;
++
++/**
++ * Event fired when an eye of ender is launched. Bukkit does not natively fire an event when
++ * eyes of ender are launched so this event was added as a workaround since more elegant alternatives
++ * would have fundamentally altered the class structure of eyes of ender more than I would have liked.
++ *
++ * @author Rafi Baum
++ */
++public class EnderEyeLaunchEvent extends EntityEvent implements Cancellable, EntityAction {
++
++  private static HandlerList handlers = new HandlerList();
++  private boolean cancelled;
++  private HumanEntity shooter;
++
++  /**
++   * Constructor.
++   *
++   * @param what eye being launched
++   * @param shooter entity shooting the eye
++   */
++  public EnderEyeLaunchEvent(EnderSignal what, HumanEntity shooter) {
++    super(what);
++    this.shooter = shooter;
++  }
++
++  @Override
++  public boolean isCancelled() {
++    return cancelled;
++  }
++
++  @Override
++  public void setCancelled(boolean cancel) {
++    this.cancelled = cancel;
++  }
++
++  @Override
++  public HumanEntity getActor() {
++    return shooter;
++  }
++
++  @Override
++  public HandlerList getHandlers() {
++    return handlers;
++  }
++
++  public static HandlerList getHandlerList() {
++    return handlers;
++  }
++}
+-- 
+2.22.1
+

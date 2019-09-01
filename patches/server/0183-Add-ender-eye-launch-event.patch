@@ -1,0 +1,74 @@
+From 0efbfabf9dd0dcebb66a9b4288af900de84149ff Mon Sep 17 00:00:00 2001
+From: Rafi Baum <rafi@ukbaums.com>
+Date: Sat, 31 Aug 2019 23:13:28 -0400
+Subject: [PATCH] Add ender eye launch event
+
+
+diff --git a/src/main/java/net/minecraft/server/ItemEnderEye.java b/src/main/java/net/minecraft/server/ItemEnderEye.java
+index 8c000a1ea..4f0d06844 100644
+--- a/src/main/java/net/minecraft/server/ItemEnderEye.java
++++ b/src/main/java/net/minecraft/server/ItemEnderEye.java
+@@ -1,5 +1,9 @@
+ package net.minecraft.server;
+ 
++import network.stratus.sportpaper.api.events.EnderEyeLaunchEvent;
++import org.bukkit.craftbukkit.event.CraftEventFactory;
++import org.bukkit.entity.EnderSignal;
++
+ public class ItemEnderEye extends Item {
+ 
+     public ItemEnderEye() {
+@@ -115,6 +119,13 @@ public class ItemEnderEye extends Item {
+ 
+                 if (blockposition != null) {
+                     EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY, entityhuman.locZ);
++                    // SportPaper - add ender eye event
++                    EnderEyeLaunchEvent event = CraftEventFactory
++                        .callEnderEyeLaunchEvent((EnderSignal) entityendersignal.getBukkitEntity(), entityhuman.getBukkitEntity());
++                    if (event.isCancelled()) {
++                        return itemstack;
++                    }
++                    // SportPaper - end
+ 
+                     entityendersignal.a(blockposition);
+                     world.addEntity(entityendersignal);
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index 6ad5f4923..ab020c828 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -12,6 +12,7 @@ import com.google.common.base.Functions;
+ 
+ import net.minecraft.server.*;
+ 
++import network.stratus.sportpaper.api.events.EnderEyeLaunchEvent;
+ import org.bukkit.Bukkit;
+ import org.bukkit.Material;
+ import org.bukkit.Server;
+@@ -35,10 +36,12 @@ import org.bukkit.craftbukkit.util.CraftDamageSource;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.Arrow;
+ import org.bukkit.entity.Creeper;
++import org.bukkit.entity.EnderSignal;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.entity.ExperienceOrb;
+ import org.bukkit.entity.Firework;
+ import org.bukkit.entity.Horse;
++import org.bukkit.entity.HumanEntity;
+ import org.bukkit.entity.LightningStrike;
+ import org.bukkit.entity.LivingEntity;
+ import org.bukkit.entity.Pig;
+@@ -1080,4 +1083,11 @@ public class CraftEventFactory {
+         world.getServer().getPluginManager().callEvent(event);
+         return event;
+     }
++
++    // SportPaper - add ender eye launch event
++    public static EnderEyeLaunchEvent callEnderEyeLaunchEvent(EnderSignal enderSignal, HumanEntity shooter) {
++        EnderEyeLaunchEvent event = new EnderEyeLaunchEvent(enderSignal, shooter);
++        Bukkit.getPluginManager().callEvent(event);
++        return event;
++    }
+ }
+-- 
+2.22.1
+
